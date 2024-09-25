@@ -53,4 +53,39 @@ public class PoemDAO {
         }
         return poemDTOList;
     }
+
+    public PoemDTO getPoemById(int id){
+        try (EntityManager em = emf.createEntityManager()){
+            Poem poem = em.find(Poem.class, id);
+            if (poem != null){
+                return new PoemDTO(poem);
+            }
+            return null;
+        }
+    }
+
+    public void delete(int id){
+        try (EntityManager em = emf.createEntityManager()){
+            em.getTransaction().begin();
+            Poem poem = em.find(Poem.class, id);
+            if (poem != null){
+                em.remove(poem);
+            }
+            em.getTransaction().commit();
+        }
+    }
+
+    public PoemDTO update(int id, PoemDTO poemDTO){
+        try (EntityManager em = emf.createEntityManager()) {
+            Poem poem = em.find(Poem.class, id);
+            if (poem != null) {
+                em.getTransaction().begin();
+                poem.setTitle(poemDTO.getTitle());
+                poem.setPoem(poemDTO.getPoem());
+                poem.setStyle(poemDTO.getStyle());
+                em.getTransaction().commit();
+            };
+            return new PoemDTO(poem);
+        }
+    }
 }

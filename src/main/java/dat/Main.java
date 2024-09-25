@@ -28,15 +28,24 @@ public class Main {
                 })
                 .delete("/poem/{id}", ctx -> {
                     int id = Integer.parseInt(ctx.pathParam("id"));
-                    ctx.result("delete: " + id);
+                    poemDAO.delete(id);
+                    ctx.result("deleted: " + id);
                 })
                 .get("/poem/{id}", ctx -> {
                     int id = Integer.parseInt(ctx.pathParam("id"));
-                    ctx.result("get by id: " + id);
+                    PoemDTO poemDTO = poemDAO.getPoemById(id);
+                    if (poemDTO != null) {
+                        ctx.json(poemDTO);
+                    } else {
+                        ctx.result("No poem found");
+                    }
                 })
                 .put("/poem/{id}", ctx -> {
                     int id = Integer.parseInt(ctx.pathParam("id"));
-                    ctx.result("update");
+                    PoemDTO poemDTO = ctx.bodyAsClass(PoemDTO.class);
+                    poemDTO = poemDAO.update(id, poemDTO);
+                    ctx.status(HttpStatus.OK);
+                    ctx.json(poemDTO);
                 })
                 .get("/poems", ctx -> {
                     List<PoemDTO> poemDTOS = poemDAO.getPoems();
