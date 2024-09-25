@@ -1,4 +1,6 @@
-# Startcode for Java Deep Dive II week
+# Poem Codelab exercise
+
+This is a solution to part of the [Codelab exercise](https://dat3cph.github.io/material/rest-intro/exercises/codelab/)
 
 Includes:
 
@@ -10,6 +12,4 @@ Includes:
 - Test containers
 
 Is created for Java 17 corretto
-
-The Person entity is just for testing purposes and needs a database called "person" to work with JPA.
 
