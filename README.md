@@ -13,3 +13,6 @@ Includes:
 
 Is created for Java 17 corretto
 
+## Endpoints
+
+[Overview](http://localhost:7070/routes)

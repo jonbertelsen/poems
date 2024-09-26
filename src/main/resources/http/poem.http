@@ -11,7 +11,7 @@ DELETE {{url}}/poem/3
 
 ### UPDATE
 
-PUT  {{url}}/poem/3
+PUT  {{url}}/poem/1
 
  {
     "title": "Summers's first soft snow",

@@ -1,6 +1,5 @@
 package dat.config;
 
-import dat.entities.Person;
 import dat.entities.Poem;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
@@ -66,7 +65,7 @@ public class HibernateConfig {
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
         props.put("hibernate.hbm2ddl.auto", "create");
         props.put("hibernate.current_session_context_class", "thread");
-        props.put("hibernate.show_sql", "true");
+        props.put("hibernate.show_sql", "false");
         props.put("hibernate.format_sql", "true");
         props.put("hibernate.use_sql_comments", "true");
         return props;
