@@ -1,6 +1,5 @@
 package dat.controllers;
 
-import dat.Main;
 import dat.config.HibernateConfig;
 import dat.daos.PoemDAO;
 import dat.dtos.PoemDTO;
@@ -9,7 +8,6 @@ import io.javalin.http.HttpStatus;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.List;
 
 
