@@ -33,7 +33,7 @@ If you want to clone the `architecture` branch, you can do so with the following
 ## Helpful links and resources
 
 1. [The Poem API Security Exercise](https://dat3cph.github.io/material/rest-test-security/exercises/poems-security/)
-2.  [Useful snippets](https://dat3cph.github.io/material/tools/security/api-security/)
+2.  [Useful snippets](https://dat3cph.github.io/material/tools/security/api)
 3. [Token Security Library](https://github.com/Hartmannsolution/TokenSecurity)
 4. [Thomas' solution that we can copy/paste from](https://github.com/Hartmannsolution/poemsolution)
 
