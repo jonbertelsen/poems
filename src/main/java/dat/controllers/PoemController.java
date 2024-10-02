@@ -14,6 +14,7 @@ import java.util.List;
 public class PoemController {
 
     private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("poems");
+
     PoemDAO poemDAO = PoemDAO.getInstance(emf);
 
     private static final Logger logger = LoggerFactory.getLogger(PoemController.class);
