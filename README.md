@@ -42,16 +42,16 @@ If you want to clone the `architecture` branch, you can do so with the following
 This branch has been refactored to include security. It uses the TokenSecurity library.
 This can be used to secure other APIs as well. You will need to copy these files:
 
-- The whole `security` package
-- The pom.xml dependencies used for security.
+1. The whole `security` package
+2. The pom.xml dependencies used for security.
     - jbcrypt
     - jitpack.io repository
     - TokenSecurity
-- config.properties with the secret key for jwt should be in the resources folder
-- The `accessHandler` in the `ApplicationConfig` class
-- The `setGeneralExceptionHandling` method in the `ApplicationConfig` class
-- Add the User and Role entity classes to the HibernateConfig file
-- Lastly, you need to add Role.EVERYONE, ROLE.USER, and ROLE.ADMIN to the endpoints. Check how it is done in the `SecurityRoutes` class.
+3. config.properties with the secret key for jwt should be in the resources folder
+4. The `accessHandler` in the `ApplicationConfig` class
+5. The `setGeneralExceptionHandling` method in the `ApplicationConfig` class
+6. Add the User and Role entity classes to the HibernateConfig file
+7. Lastly, you need to add Role.EVERYONE, ROLE.USER, and ROLE.ADMIN to the endpoints. Check how it is done in the `SecurityRoutes` class.
   - Remember to check for a valid token in the `SecurityRoutes` class. The `before` is doing the job:
   
       ```java
