@@ -3,6 +3,7 @@ package dat.security.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nimbusds.jose.JOSEException;
+import dat.config.ApplicationConfig;
 import dat.security.enums.Role;
 import dat.utils.Utils;
 import dat.config.HibernateConfig;
@@ -17,10 +18,13 @@ import dk.bugelhartmann.TokenSecurity;
 import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
+import io.javalin.http.UnauthorizedResponse;
 import io.javalin.security.RouteRole;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.Set;
@@ -35,9 +39,9 @@ public class SecurityController implements ISecurityController {
     ITokenSecurity tokenSecurity = new TokenSecurity();
     private static ISecurityDAO securityDAO;
     private static SecurityController instance;
+    private static Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
     private SecurityController() { }
-
 
     public static SecurityController getInstance() { // Singleton because we don't want multiple instances of the same class
         if (instance == null) {
@@ -88,7 +92,7 @@ public class SecurityController implements ISecurityController {
     }
 
     @Override
-    public Handler authenticate() {
+    public Handler authenticate() throws UnauthorizedResponse {
 
         ObjectNode returnObject = objectMapper.createObjectNode();
         return (ctx) -> {
@@ -98,42 +102,34 @@ public class SecurityController implements ISecurityController {
                 return;
             }
             String header = ctx.header("Authorization");
-            // If there is no token we do not allow entry
-            if (header == null || "Bearer".equals(header)) {
-                ctx.status(HttpStatus.FORBIDDEN);
-                ctx.json(returnObject.put("msg", "Authorization header missing"));
-                return;
+            if (header == null) {
+                throw new UnauthorizedResponse("Authorization header missing");
             }
 
-            String token = header.split(" ")[1];
-            // If the Authorization Header was malformed = no entry
-            if (token == null) {
-                ctx.status(HttpStatus.FORBIDDEN);
-                ctx.json(returnObject.put("msg", "Authorization header malformed"));
-                return;
+            String[] headerParts = header.split(" ");
+            if (headerParts.length != 2) {
+                throw new UnauthorizedResponse("Authorization header malformed");
             }
+
+            String token = headerParts[1];
             UserDTO verifiedTokenUser = verifyToken(token);
+
             if (verifiedTokenUser == null) {
-                ctx.status(HttpStatus.FORBIDDEN);
-                ctx.json(returnObject.put("msg", "Invalid User or Token"));
-                return;
+                throw new UnauthorizedResponse("Invalid User or Token");
             }
-            System.out.println("USER IN AUTHENTICATE: " + verifiedTokenUser);
-            ctx.attribute("user", verifiedTokenUser); // -> ctx.attribute("user") in ApplicationConfig beforeMatched filter
+            logger.info("User verified: " + verifiedTokenUser);
+            ctx.attribute("user", verifiedTokenUser);
         };
     }
 
     @Override
     // Check if the user's roles contain any of the allowed roles
     public boolean authorize(UserDTO user, Set<RouteRole> allowedRoles) {
-        if (allowedRoles.isEmpty() || allowedRoles.contains(Role.ANYONE)) {
-            return true;
-        }
         if (user == null) {
-            return false;
+            throw new UnauthorizedResponse("You need to log in, dude!");
         }
         Set<String> roleNames = allowedRoles.stream()
-                   .map(RouteRole::toString)  // Convert RouteRoles to Strings
+                   .map(RouteRole::toString)  // Convert RouteRoles to  Set of Strings
                    .collect(Collectors.toSet());
         return user.getRoles().stream()
                    .map(String::toUpperCase)
@@ -152,8 +148,8 @@ public class SecurityController implements ISecurityController {
                 TOKEN_EXPIRE_TIME = System.getenv("TOKEN_EXPIRE_TIME");
                 SECRET_KEY = System.getenv("SECRET_KEY");
             } else {
-                ISSUER = "Thomas Hartmann";
-                TOKEN_EXPIRE_TIME = "1800000";
+                ISSUER = Utils.getPropertyValue("ISSUER", "config.properties");
+                TOKEN_EXPIRE_TIME = Utils.getPropertyValue("TOKEN_EXPIRE_TIME", "config.properties");
                 SECRET_KEY = Utils.getPropertyValue("SECRET_KEY", "config.properties");
             }
             return tokenSecurity.createToken(user, ISSUER, TOKEN_EXPIRE_TIME, SECRET_KEY);

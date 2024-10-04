@@ -8,6 +8,11 @@ import io.javalin.security.RouteRole;
 
 import java.util.Set;
 
+/**
+ * Purpose: To handle security in the API at the route level
+ *  Author: Jon Bertelsen
+ */
+
 public class AccessController implements IAccessController {
 
     SecurityController securityController = SecurityController.getInstance();
@@ -17,26 +22,26 @@ public class AccessController implements IAccessController {
      * @param ctx
      */
     public void accessHandler(Context ctx) {
-       if (ctx.routeRoles().isEmpty() || ctx.routeRoles().contains(Role.ANYONE)){
-           return;  // if no roles are specified, then anyone can access the route
-       }
 
-       // man er logget ind, men har ikke den rigtige user rolle - giver en forkert fejl.
+        // If no roles are specified on the endpoint, then anyone can access the route
+        if (ctx.routeRoles().isEmpty() || ctx.routeRoles().contains(Role.ANYONE)){
+           return;
+        }
 
+        // Check if the user is authenticated
         try {
             securityController.authenticate().handle(ctx);
+        } catch (UnauthorizedResponse e) {
+            throw new UnauthorizedResponse(e.getMessage());
         } catch (Exception e) {
             throw new UnauthorizedResponse("You need to log in, dude! Or you token is invalid.");
         }
 
-        UserDTO user = ctx.attribute("user"); // the User was put in the context by the SecurityController.authenticate method (in a before filter on the route)
+        // Check if the user has the necessary roles to access the route
+        UserDTO user = ctx.attribute("user");
         Set<RouteRole> allowedRoles = ctx.routeRoles(); // roles allowed for the current route
         if (!securityController.authorize(user, allowedRoles)) {
-            if (user != null){
-                throw new UnauthorizedResponse("Unauthorized with roles: " + user.getRoles() + ". Needed roles are: " + allowedRoles);
-            } else {
-                throw new UnauthorizedResponse("You need to log in, dude!");
-            }
+            throw new UnauthorizedResponse("Unauthorized with roles: " + user.getRoles() + ". Needed roles are: " + allowedRoles);
         }
     }
 }

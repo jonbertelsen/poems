@@ -1,6 +1,7 @@
 package dat.security.entities;
 
 import jakarta.persistence.*;
+import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -24,6 +25,7 @@ public class Role implements Serializable {
     @Column(name = "name", length = 20)
     private String name;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 

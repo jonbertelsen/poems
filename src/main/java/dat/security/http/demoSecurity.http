@@ -77,7 +77,7 @@ Authorization: Bearer {{jwt_token}}
   "style": "Haiku"
 }
 
-### POST example
+### POST example with multiple entries
 POST {{url}}/poems/
 Content-Type: application/json
 Accept: application/json
