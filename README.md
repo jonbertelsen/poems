@@ -48,10 +48,11 @@ This can be used to secure other APIs as well. You will need to copy these files
     - jitpack.io repository
     - TokenSecurity
 3. config.properties with the secret key for jwt should be in the resources folder
-4. The `accessHandler` in the `ApplicationConfig` class
-5. The `setGeneralExceptionHandling` method in the `ApplicationConfig` class
-6. Add the User and Role entity classes to the HibernateConfig file
-7. Lastly, you need to add Role.EVERYONE, ROLE.USER, and ROLE.ADMIN to the endpoints. Check how it is done in the `SecurityRoutes` class.
+4. The utils package
+5. The `accessHandler` in the `ApplicationConfig` class
+6. The `setGeneralExceptionHandling` method in the `ApplicationConfig` class
+7. Add the User and Role entity classes to the HibernateConfig file
+8. Lastly, you need to add Role.EVERYONE, ROLE.USER, and ROLE.ADMIN to the endpoints. Check how it is done in the `SecurityRoutes` class.
   - Remember to check for a valid token in the `SecurityRoutes` class. The `before` is doing the job:
   
       ```java
