@@ -21,12 +21,34 @@
         <testcontainers.version>1.18.0</testcontainers.version>
         <hikari.version>5.1.0</hikari.version>
         <javalin.version>6.3.0</javalin.version>
+        <jbcrypt.version>0.4</jbcrypt.version>
+        <token.security.version>1.0.1</token.security.version>
 
         <!-- DATABASE PROJECT NAME ON SERVER  -->
         <db.name>jpademo</db.name>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
+
+        <dependency>
+            <groupId>com.github.Hartmannsolution</groupId>
+            <artifactId>TokenSecurity</artifactId>
+            <version>${token.security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${jbcrypt.version}</version>
+        </dependency>
+
 
         <!-- SLF4J API -->
         <dependency>

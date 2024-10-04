@@ -1,6 +1,7 @@
 package dat.routes;
 
 import dat.controllers.PoemController;
+import dat.security.enums.Role;
 import io.javalin.apibuilder.EndpointGroup;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
@@ -11,10 +12,10 @@ public class PoemRoutes {
 
     public EndpointGroup getRoutes(){
         return () -> {
-            post("/", poemController::createPoem);
-            delete("/{id}", poemController::delete);
-            put("/{id}", poemController::update);
-            get("/{id}", poemController::getById);
+            post("/", poemController::createPoem, Role.ADMIN);
+            delete("/{id}", poemController::delete, Role.ADMIN);
+            put("/{id}", poemController::update, Role.ADMIN);
+            get("/{id}", poemController::getById, Role.ANYONE);
         };
     }
 }

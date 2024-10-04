@@ -23,6 +23,7 @@ PUT  {{url}}/poem/1
 POST {{url}}/poem
 Content-Type: application/json
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJUaG9tYXMgSGFydG1hbm4iLCJzdWIiOiJ1c2VyIiwiZXhwIjoxNzI3OTYzMzQ3LCJyb2xlcyI6InVzZXIiLCJ1c2VybmFtZSI6InVzZXIifQ.DuexveLRHzorqv2PDJlmwbEKq5yhdTqsaKFR_Hg8sOk
 
 {
   "title": "Sunrise paints the sky",
