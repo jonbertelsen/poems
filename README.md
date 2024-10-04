@@ -53,6 +53,7 @@ This can be used to secure other APIs as well. You will need to copy these files
     SECRET_KEY="841D8A6C80CBA4FCAD32D5367C18C5"
      ```
 4. The utils package
-5. The `generalExceptionHandler` and `apiExceptionHandler` method in the `ApplicationConfig` class
-6. Add the User and Role entity classes to the HibernateConfig file
-7. Lastly, you need to add Role.EVERYONE, ROLE.USER, and ROLE.ADMIN to the endpoints. Check how it is done in the `SecurityRoutes` class.
+5. The startServer method in the `Application` class
+6. The `generalExceptionHandler` and `apiExceptionHandler` method in the `ApplicationConfig` class
+7. Add the User and Role entity classes to the HibernateConfig file
+8. Lastly, you need to add Role.EVERYONE, ROLE.USER, and ROLE.ADMIN to the endpoints. Check how it is done in the `SecurityRoutes` class.
