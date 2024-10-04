@@ -22,8 +22,6 @@ public class SecurityRoutes {
                 get("/test", ctx->ctx.json(jsonMapper.createObjectNode().put("msg",  "Hello from Open")), Role.ANYONE);
                 post("/login", securityController.login(), Role.ANYONE);
                 post("/register", securityController.register(), Role.ANYONE);
-//                post("/authenticate", securityController.authenticate());
-//                get("/logout", securityController.logout());
             });
         };
     }

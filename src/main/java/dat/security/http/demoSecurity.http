@@ -17,7 +17,10 @@ POST {{url}}/auth/login
     "password": "test123"
 }
 
-> {% client.global.set("jwt_token", response.body.token); %}
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
 
 ###
 GET {{url}}/protected/user_demo
@@ -26,6 +29,7 @@ Authorization: Bearer {{jwt_token}}
 ###
 GET {{url}}/protected/admin_demo
 Authorization: Bearer {{jwt_token}}
+
 
 ### POST example
 POST {{url}}/poems
@@ -85,3 +89,17 @@ Authorization: Bearer {{jwt_token}}
     "style": "Haiku"
   }
 ]
+
+### Reset token
+GET {{url}}/auth/test/
+
+> {%
+    client.global.set("jwt_token", "");
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+### GET request with a header
+GET {{url}}/poems
+Accept: application/json
+
+

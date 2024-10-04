@@ -99,19 +99,24 @@ public class SecurityController implements ISecurityController {
             }
             String header = ctx.header("Authorization");
             // If there is no token we do not allow entry
-            if (header == null) {
-                ctx.status(HttpStatus.FORBIDDEN).json(returnObject.put("msg", "Authorization header missing"));
+            if (header == null || "Bearer".equals(header)) {
+                ctx.status(HttpStatus.FORBIDDEN);
+                ctx.json(returnObject.put("msg", "Authorization header missing"));
                 return;
             }
+
             String token = header.split(" ")[1];
             // If the Authorization Header was malformed = no entry
             if (token == null) {
-                ctx.status(HttpStatus.FORBIDDEN).json(returnObject.put("msg", "Authorization header malformed"));
+                ctx.status(HttpStatus.FORBIDDEN);
+                ctx.json(returnObject.put("msg", "Authorization header malformed"));
                 return;
             }
             UserDTO verifiedTokenUser = verifyToken(token);
             if (verifiedTokenUser == null) {
-                ctx.status(HttpStatus.FORBIDDEN).json(returnObject.put("msg", "Invalid User or Token"));
+                ctx.status(HttpStatus.FORBIDDEN);
+                ctx.json(returnObject.put("msg", "Invalid User or Token"));
+                return;
             }
             System.out.println("USER IN AUTHENTICATE: " + verifiedTokenUser);
             ctx.attribute("user", verifiedTokenUser); // -> ctx.attribute("user") in ApplicationConfig beforeMatched filter
@@ -174,4 +179,5 @@ public class SecurityController implements ISecurityController {
             throw new ApiException(HttpStatus.UNAUTHORIZED.getCode(), "Unauthorized. Could not verify token");
         }
     }
+
 }

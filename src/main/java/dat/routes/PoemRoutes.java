@@ -12,14 +12,12 @@ public class PoemRoutes {
     PoemController poemController = new PoemController();
     SecurityController securityController = SecurityController.getInstance();
 
-    public EndpointGroup getRoutes(){
+    public EndpointGroup getRoutes() {
         return () -> {
-
             get("/{id}", poemController::getById, Role.ANYONE);
-            before(securityController.authenticate()); // check if there is a valid token in the header
             post("/", poemController::createPoem, Role.ADMIN);
             delete("/{id}", poemController::delete, Role.ADMIN);
             put("/{id}", poemController::update, Role.ADMIN);
-                   };
+        };
     }
 }

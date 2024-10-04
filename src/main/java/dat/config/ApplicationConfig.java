@@ -38,7 +38,8 @@ public class ApplicationConfig {
     public static Javalin startServer(int port) {
         Javalin app = Javalin.create(ApplicationConfig::configuration);
         app.beforeMatched(ApplicationConfig::accessHandler);
-        setGeneralExceptionHandling(app);
+        app.exception(Exception.class, ApplicationConfig::generalExceptionHandler);
+        app.exception(ApiException.class, ApplicationConfig::apiExceptionHandler);
         app.start(port);
         return app;
     }
@@ -47,18 +48,15 @@ public class ApplicationConfig {
         app.stop();
     }
 
-    private static void setGeneralExceptionHandling(Javalin app) {
-        app.exception(Exception.class, (e, ctx) -> {
-            logger.error("An unhandled exception occurred", e.getMessage());
-            ctx.json(Utils.convertErrorToJson(e.getMessage()));
-        });
+    private static void generalExceptionHandler(Exception e, Context ctx) {
+        logger.error("An unhandled exception occurred", e.getMessage());
+        ctx.json(Utils.convertErrorToJson(e.getMessage()));
+    }
 
-        app.exception(ApiException.class, (e, ctx) -> {
-            ctx.status(e.getCode());
-            logger.warn("An API exception occurred: Code: {}, Message: {}", e.getCode(), e.getMessage());
-
-            ctx.json(Utils.convertErrorToJson(e.getMessage()));
-        });
+    public static void apiExceptionHandler(ApiException e, Context ctx) {
+        ctx.status(e.getCode());
+        logger.warn("An API exception occurred: Code: {}, Message: {}", e.getCode(), e.getMessage());
+        ctx.json(Utils.convertErrorToJson(e.getMessage()));
     }
 
     private static void accessHandler(Context ctx) {

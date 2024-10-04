@@ -3,6 +3,7 @@ package dat.controllers;
 import dat.config.HibernateConfig;
 import dat.daos.PoemDAO;
 import dat.dtos.PoemDTO;
+import dat.utils.Utils;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import jakarta.persistence.EntityManagerFactory;
@@ -34,28 +35,31 @@ public class PoemController {
         PoemDTO[] poemDTOS = ctx.bodyAsClass(PoemDTO[].class);
         // Gem alle digtene i databasen (dao) og modtag en liste af de nye digte
         List<PoemDTO> newPoemDTOs = poemDAO.createFromList(poemDTOS);
+        logger.info("Poems created: " + newPoemDTOs.toString());
         ctx.status(HttpStatus.CREATED);
         ctx.json(newPoemDTOs);
     }
 
     public void createPoem(Context ctx){
-        debugLogger.debug("ERROR /poem");
         PoemDTO poemDTO = ctx.bodyAsClass(PoemDTO.class);
         PoemDTO newPoemDTO = poemDAO.create(poemDTO);
+        logger.info("Poem created: " + poemDTO.toString());
         ctx.status(HttpStatus.CREATED);
         ctx.json(newPoemDTO);
     }
 
     public void delete(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("id"));
+        logger.info("Poem deleted with id = " + id);
         poemDAO.delete(id);
-        ctx.result("deleted: " + id);
+        ctx.json(Utils.convertErrorToJson("deleted: " + id));
     }
 
     public void update(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("id"));
         PoemDTO poemDTO = ctx.bodyAsClass(PoemDTO.class);
         poemDTO = poemDAO.update(id, poemDTO);
+        logger.info("Poem updated: " + poemDTO.toString());
         ctx.status(HttpStatus.OK);
         ctx.json(poemDTO);
     }
@@ -66,7 +70,8 @@ public class PoemController {
         if (poemDTO != null) {
             ctx.json(poemDTO);
         } else {
-            ctx.result("No poem found");
+            logger.warn("Poem not found with id = " + id);
+            ctx.json(Utils.convertErrorToJson("Poem not found"));
         }
     }
 
