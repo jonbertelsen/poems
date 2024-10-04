@@ -15,11 +15,6 @@ public class PoemsRoutes {
 
     public EndpointGroup getRoutes(){
         return () -> {
-            before(ctx -> {
-                if (!ctx.method().equals("GET")) {
-                    securityController.authenticate().handle(ctx);
-                }
-            });
             get("/", poemController::getPoems, Role.ANYONE );
             post("/", poemController::createPoems, Role.USER);
         };

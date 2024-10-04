@@ -52,7 +52,7 @@ public class PoemController {
         int id = Integer.parseInt(ctx.pathParam("id"));
         logger.info("Poem deleted with id = " + id);
         poemDAO.delete(id);
-        ctx.json(Utils.convertErrorToJson("deleted: " + id));
+        ctx.json(Utils.convertToJsonMessage(ctx, "info","deleted: " + id));
     }
 
     public void update(Context ctx){
@@ -71,7 +71,7 @@ public class PoemController {
             ctx.json(poemDTO);
         } else {
             logger.warn("Poem not found with id = " + id);
-            ctx.json(Utils.convertErrorToJson("Poem not found"));
+            ctx.json(Utils.convertToJsonMessage(ctx, "info","Poem not found"));
         }
     }
 

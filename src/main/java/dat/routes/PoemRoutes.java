@@ -15,9 +15,9 @@ public class PoemRoutes {
     public EndpointGroup getRoutes() {
         return () -> {
             get("/{id}", poemController::getById, Role.ANYONE);
-            post("/", poemController::createPoem, Role.ADMIN);
-            delete("/{id}", poemController::delete, Role.ADMIN);
-            put("/{id}", poemController::update, Role.ADMIN);
+            post("/", poemController::createPoem, Role.USER);
+            delete("/{id}", poemController::delete, Role.USER);
+            put("/{id}", poemController::update, Role.USER);
         };
     }
 }

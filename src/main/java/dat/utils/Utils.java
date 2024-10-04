@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dat.security.exceptions.ApiException;
+import io.javalin.http.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,14 +42,15 @@ public class Utils {
         return objectMapper;
     }
 
-    public static String convertErrorToJson(String message) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("error", message);  // Put the message in the map
+    public static String convertToJsonMessage(Context ctx, String property, String message) {
+        Map<String, String> msgMap = new HashMap<>();
+        msgMap.put(property, message);  // Put the message in the map
+        msgMap.put("status", String.valueOf(ctx.status()));  // Put the status in the map
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.writeValueAsString(errorMap);  // Convert the map to JSON
+            return objectMapper.writeValueAsString(msgMap);  // Convert the map to JSON
         } catch (Exception e) {
-            return "{\"error\": \"Could not convert error message to JSON\"}";
+            return "{\"error\": \"Could not convert  message to JSON\"}";
         }
     }
 }

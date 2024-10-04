@@ -23,7 +23,6 @@ import jakarta.persistence.EntityNotFoundException;
 
 import java.text.ParseException;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**

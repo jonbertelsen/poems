@@ -1,19 +1,19 @@
 ### A simple get request to the test endpoint. No need for login
-GET {{url}}/auth/test
+GET {{url}}/auth/test/
 
 ### Create a new user - this one will only get a USER role by default
-POST {{url}}/auth/register
+POST {{url}}/auth/register/
 
 {
-    "username": "user",
+    "username": "admin",
     "password": "test123"
 }
 
 ###
-POST {{url}}/auth/login
+POST {{url}}/auth/login/
 
 {
-    "username": "user",
+    "username": "admin",
     "password": "test123"
 }
 
@@ -23,16 +23,51 @@ POST {{url}}/auth/login
 %}
 
 ###
-GET {{url}}/protected/user_demo
+GET {{url}}/protected/user_demo/
+Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
 ###
-GET {{url}}/protected/admin_demo
+GET {{url}}/protected/admin_demo/
+Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
+### UPDATE
+
+PUT  {{url}}/poem/1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+ {
+    "title": "Summers's first soft snow",
+    "poem": "Summers's first soft snow, Blankets fields in quiet white, Footsteps lost below.",
+    "style": "Poetry Slam"
+  }
+
+### GET request with a header
+GET {{url}}/poem/1
+Accept: application/json
+
+### DELETE
+DELETE {{url}}/poem/1/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### POST example
-POST {{url}}/poems
+POST {{url}}/poem/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "title": "Sunrise paints the sky",
+  "poem": "Sunrise paints the sky, Gentle waves kiss sandy shores, Day awakens slow.",
+  "style": "Haiku"
+}
+
+### POST example
+POST {{url}}/poems/
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
@@ -94,12 +129,12 @@ Authorization: Bearer {{jwt_token}}
 GET {{url}}/auth/test/
 
 > {%
-    client.global.set("jwt_token", "");
+    client.global.set("jwt_token", null);
     console.log("JWT Token:", client.global.get("jwt_token"));
 %}
 
 ### GET request with a header
-GET {{url}}/poems
+GET {{url}}/poems/
 Accept: application/json
 
 

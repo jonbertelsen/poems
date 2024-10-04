@@ -45,12 +45,12 @@ public class ApplicationConfig {
 
     private static void generalExceptionHandler(Exception e, Context ctx) {
         logger.error("An unhandled exception occurred", e.getMessage());
-        ctx.json(Utils.convertErrorToJson(e.getMessage()));
+        ctx.json(Utils.convertToJsonMessage(ctx, "error", e.getMessage()));
     }
 
     public static void apiExceptionHandler(ApiException e, Context ctx) {
         ctx.status(e.getCode());
         logger.warn("An API exception occurred: Code: {}, Message: {}", e.getCode(), e.getMessage());
-        ctx.json(Utils.convertErrorToJson(e.getMessage()));
+        ctx.json(Utils.convertToJsonMessage(ctx, "warning", e.getMessage()));
     }
 }
