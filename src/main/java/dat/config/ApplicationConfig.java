@@ -2,28 +2,23 @@ package dat.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dat.routes.Routes;
+import dat.security.controllers.AccessController;
 import dat.security.controllers.SecurityController;
 import dat.security.exceptions.ApiException;
 import dat.security.routes.SecurityRoutes;
 import dat.utils.Utils;
-import dk.bugelhartmann.UserDTO;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 import io.javalin.http.Context;
-import io.javalin.http.Handler;
-import io.javalin.http.HttpStatus;
-import io.javalin.security.RouteRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ApplicationConfig {
 
     private static Routes routes = new Routes();
     private static ObjectMapper jsonMapper = new Utils().getObjectMapper();
     private static SecurityController securityController = SecurityController.getInstance();
+    private static AccessController accessController = new AccessController();
     private static Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
 
     public static void configuration(JavalinConfig config) {
@@ -37,7 +32,7 @@ public class ApplicationConfig {
 
     public static Javalin startServer(int port) {
         Javalin app = Javalin.create(ApplicationConfig::configuration);
-        app.beforeMatched(ApplicationConfig::accessHandler);
+        app.beforeMatched(accessController::accessHandler);
         app.exception(Exception.class, ApplicationConfig::generalExceptionHandler);
         app.exception(ApiException.class, ApplicationConfig::apiExceptionHandler);
         app.start(port);
@@ -57,17 +52,5 @@ public class ApplicationConfig {
         ctx.status(e.getCode());
         logger.warn("An API exception occurred: Code: {}, Message: {}", e.getCode(), e.getMessage());
         ctx.json(Utils.convertErrorToJson(e.getMessage()));
-    }
-
-    private static void accessHandler(Context ctx) {
-        UserDTO user = ctx.attribute("user"); // the User was put in the context by the SecurityController.authenticate method (in a before filter on the route)
-        Set<RouteRole> allowedRoles = ctx.routeRoles(); // roles allowed for the current route
-        if (!securityController.authorize(user, allowedRoles)) {
-            if (user != null){
-                throw new ApiException(HttpStatus.FORBIDDEN.getCode(), "Unauthorized with roles: " + user.getRoles() + ". Needed roles are: " + allowedRoles);
-            } else {
-                throw new ApiException(HttpStatus.FORBIDDEN.getCode(), "You need to log in, dude!");
-            }
-        }
     }
 }
