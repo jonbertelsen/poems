@@ -47,7 +47,11 @@ This can be used to secure other APIs as well. You will need to copy these files
     - jbcrypt
     - jitpack.io repository
     - TokenSecurity
-3. config.properties with the secret key for jwt should be in the resources folder
+3. `config.properties` with the secret key for jwt should be in the resources folder. Since we don't want to expose the file on Github, you need to to create it yourself and add this into it:
+  
+    ```terminal 
+    SECRET_KEY="841D8A6C80CBA4FCAD32D5367C18C5"
+     ```
 4. The utils package
 5. The `accessHandler` in the `ApplicationConfig` class
 6. The `setGeneralExceptionHandling` method in the `ApplicationConfig` class
