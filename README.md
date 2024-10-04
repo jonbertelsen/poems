@@ -53,20 +53,6 @@ This can be used to secure other APIs as well. You will need to copy these files
     SECRET_KEY="841D8A6C80CBA4FCAD32D5367C18C5"
      ```
 4. The utils package
-5. The `accessHandler` in the `ApplicationConfig` class
-6. The `setGeneralExceptionHandling` method in the `ApplicationConfig` class
-7. Add the User and Role entity classes to the HibernateConfig file
-8. Lastly, you need to add Role.EVERYONE, ROLE.USER, and ROLE.ADMIN to the endpoints. Check how it is done in the `SecurityRoutes` class.
-  - Remember to check for a valid token in the `SecurityRoutes` class. The `before` is doing the job:
-  
-      ```java
-        public static EndpointGroup getSecuredRoutes(){
-            return ()->{
-                path("/protected", ()->{
-                    before(securityController.authenticate()); // check if there is a valid token in the header
-                    get("/user_demo", (ctx)->ctx.json(jsonMapper.createObjectNode().put("msg",  "Hello from USER Protected")), Role.USER);
-                    get("/admin_demo", (ctx)->ctx.json(jsonMapper.createObjectNode().put("msg",  "Hello from ADMIN Protected")), Role.ADMIN);
-                });
-        };
-    }
-    ```
+5. The `generalExceptionHandler` and `apiExceptionHandler` method in the `ApplicationConfig` class
+6. Add the User and Role entity classes to the HibernateConfig file
+7. Lastly, you need to add Role.EVERYONE, ROLE.USER, and ROLE.ADMIN to the endpoints. Check how it is done in the `SecurityRoutes` class.
