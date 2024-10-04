@@ -12,14 +12,14 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.15.0</jackson.version>
-        <lombok.version>1.18.28</lombok.version>
-        <hibernate.version>6.2.4.Final</hibernate.version>
-        <postgresql.version>42.7.2</postgresql.version>
-        <junit.version>5.9.1</junit.version>
-        <hamcrest.version>2.0.0.0</hamcrest.version>
-        <testcontainers.version>1.18.0</testcontainers.version>
-        <hikari.version>5.1.0</hikari.version>
+        <jackson.version>2.18.0</jackson.version>
+        <lombok.version>1.18.34</lombok.version>
+        <hibernate.version>6.6.1.Final</hibernate.version>
+        <postgresql.version>42.7.4</postgresql.version>
+        <junit.version>5.11.1</junit.version>
+        <hamcrest.version>3.0</hamcrest.version>
+        <testcontainers.version>1.20.2</testcontainers.version>
+        <hikari.version>6.0.0</hikari.version>
         <javalin.version>6.3.0</javalin.version>
         <jbcrypt.version>0.4</jbcrypt.version>
         <token.security.version>1.0.1</token.security.version>
@@ -112,7 +112,7 @@
         <!--        https://www.baeldung.com/hamcrest-core-matchers-->
         <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>java-hamcrest</artifactId>
+            <artifactId>hamcrest</artifactId>
             <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
