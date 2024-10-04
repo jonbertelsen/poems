@@ -35,7 +35,7 @@ public class User implements Serializable, ISecurityUser {
     private String password;
 
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_name", referencedColumnName = "username")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Role> roles = new HashSet<>();
 
     public Set<String> getRolesAsStrings() {
@@ -64,21 +64,20 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void addRole(Role role) {
+        if (role == null) {
+            return;
+        }
         roles.add(role);
+        role.getUsers().add(this);
     }
 
     public void removeRole(String userRole) {
-        roles
-                .stream()
-                .filter(role -> role
-                        .getRoleName()
-                        .equals(userRole))
+        roles.stream()
+                .filter(role -> role.getRoleName().equals(userRole))
                 .findFirst()
                 .ifPresent(role -> {
                     roles.remove(role);
-                    role
-                            .getUsers()
-                            .remove(this);
+                    role.getUsers().remove(this);
                 });
     }
 }

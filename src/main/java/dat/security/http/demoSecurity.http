@@ -5,7 +5,7 @@ GET {{url}}/auth/test/
 POST {{url}}/auth/register/
 
 {
-    "username": "admin",
+    "username": "user",
     "password": "test123"
 }
 
@@ -13,7 +13,7 @@ POST {{url}}/auth/register/
 POST {{url}}/auth/login/
 
 {
-    "username": "admin",
+    "username": "user",
     "password": "test123"
 }
 
@@ -29,6 +29,17 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 GET {{url}}/protected/admin_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Add admin role to user
+POST {{url}}/auth/user/addrole/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+    "role": "ADMIN"
+}
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 

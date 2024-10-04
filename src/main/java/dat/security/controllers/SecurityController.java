@@ -20,6 +20,7 @@ import io.javalin.http.HttpStatus;
 import io.javalin.security.RouteRole;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.util.Set;
@@ -177,6 +178,22 @@ public class SecurityController implements ISecurityController {
             e.printStackTrace();
             throw new ApiException(HttpStatus.UNAUTHORIZED.getCode(), "Unauthorized. Could not verify token");
         }
+    }
+
+    public @NotNull Handler addRole() {
+        return (ctx) -> {
+            ObjectNode returnObject = objectMapper.createObjectNode();
+            try {
+                // get the role from the body. the json is {"role": "manager"}.
+                // We need to get the role from the body and the username from the token
+                String newRole = ctx.bodyAsClass(ObjectNode.class).get("role").asText();
+                UserDTO user = ctx.attribute("user");
+                User updatedUser = securityDAO.addRole(user, newRole);
+                ctx.status(200).json(returnObject.put("msg", "Role " + newRole + " added to user"));
+            } catch (EntityNotFoundException e) {
+                ctx.status(404).json(returnObject.put("msg", "User not found"));
+            }
+        };
     }
 
 }

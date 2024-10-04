@@ -11,6 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -63,6 +64,25 @@ public class SecurityDAO implements ISecurityDAO {
         }catch (Exception e){
             e.printStackTrace();
             throw new ApiException(400, e.getMessage());
+        }
+    }
+
+    @Override
+    public User addRole(UserDTO userDTO, String newRole) {
+        try (EntityManager em = getEntityManager()) {
+            User user = em.find(User.class, userDTO.getUsername());
+            if (user == null)
+                throw new EntityNotFoundException("No user found with username: " + userDTO.getUsername());
+            em.getTransaction().begin();
+                Role role = em.find(Role.class, newRole);
+                if (role == null) {
+                    role = new Role(newRole);
+                    em.persist(role);
+                }
+                user.addRole(role);
+                //em.merge(user);
+            em.getTransaction().commit();
+            return user;
         }
     }
 }
