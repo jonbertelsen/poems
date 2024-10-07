@@ -38,7 +38,7 @@ Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-    "role": "ADMIN"
+    "role": "admin"
 }
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
