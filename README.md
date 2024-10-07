@@ -50,7 +50,7 @@ This can be used to secure other APIs as well. You will need to copy these files
 3. `config.properties` with the secret key for jwt should be in the resources folder. Since we don't want to expose the file on Github, you need to to create it yourself and add this into it:
   
    ```terminal
-   SECRET_KEY="841D8A6C80CBA4FCAD32D5367C18C5"
+   SECRET_KEY=4c9f92b04b1e85fa56e7b7b0a34f2de4f5b08cd9bb4dfe8ac4d73b4f7f6ef37b
    ISSUER="Dit navn"
    TOKEN_EXPIRE_TIME="1800000"
    ```
