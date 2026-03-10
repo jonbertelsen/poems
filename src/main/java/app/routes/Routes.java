@@ -1,4 +1,4 @@
-package dat.routes;
+package app.routes;
 
 import io.javalin.apibuilder.EndpointGroup;
 
@@ -7,14 +7,16 @@ import static io.javalin.apibuilder.ApiBuilder.path;
 
 public class Routes {
 
-    private PoemsRoutes poemsRoutes = new PoemsRoutes();
-    private PoemRoutes poemRoutes = new PoemRoutes();
+    private final PoemRoutes poemRoutes;
+
+    public Routes(PoemRoutes poemRoutes) {
+        this.poemRoutes = poemRoutes;
+    }
 
     public EndpointGroup getRoutes() {
         return () -> {
             get("/", ctx -> ctx.result("Hello World"));
-            path("/poems", poemsRoutes.getRoutes());
-            path("/poem", poemRoutes.getRoutes());
+            path("/poems", poemRoutes.getRoutes());
         };
     }
 }

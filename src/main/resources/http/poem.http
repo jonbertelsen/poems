@@ -3,15 +3,15 @@ GET {{url}}/poems
 Accept: application/json
 
 ### GET request with a header
-GET {{url}}/poem/3
+GET {{url}}/poems/3
 Accept: application/json
 
 ### DELETE
-DELETE {{url}}/poem/3
+DELETE {{url}}/poems/3
 
 ### UPDATE
 
-PUT  {{url}}/poem/1
+PUT  {{url}}/poems/1
 
  {
     "title": "Summers's first soft snow",
@@ -19,8 +19,8 @@ PUT  {{url}}/poem/1
     "style": "Poetry Slam"
   }
 
-### POST example
-POST {{url}}/poem
+### POST single poem
+POST {{url}}/poems
 Content-Type: application/json
 Accept: application/json
 
@@ -30,8 +30,8 @@ Accept: application/json
   "style": "Haiku"
 }
 
-### POST example
-POST {{url}}/poems
+### POST poem batch
+POST {{url}}/poems/batch
 Content-Type: application/json
 Accept: application/json
 
@@ -87,7 +87,6 @@ Accept: application/json
     "style": "Haiku"
   }
 ]
-
 
 
 

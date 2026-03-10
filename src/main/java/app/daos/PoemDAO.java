@@ -1,7 +1,7 @@
-package dat.daos;
+package app.daos;
 
-import dat.dtos.PoemDTO;
-import dat.entities.Poem;
+import app.dtos.PoemDTO;
+import app.entities.Poem;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -11,23 +11,13 @@ import java.util.List;
 
 public class PoemDAO {
 
-    private static PoemDAO instance;
-    private static EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
-    private PoemDAO() {
-        // private constructor
-    }
-
-    public static PoemDAO getInstance(EntityManagerFactory _emf) {
-        if (instance == null) {
-            instance = new PoemDAO();
-            emf = _emf;
-        }
-        return instance;
+    public PoemDAO(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
     public List<PoemDTO> getPoems(){
-        List<Poem> poemList = new ArrayList<>();
         try(EntityManager em = emf.createEntityManager()){
             TypedQuery<Poem> query = em.createQuery("SELECT p FROM Poem p", Poem.class);
             return PoemDTO.toDTOList(query.getResultList());
@@ -45,12 +35,17 @@ public class PoemDAO {
     }
 
     public List<PoemDTO> createFromList(PoemDTO[] poemDTOS) {
-        List<PoemDTO> poemDTOList = new ArrayList<>();
-        for (int index = 0; index < poemDTOS.length ; index++) {
-            PoemDTO newPoemDTO = create(poemDTOS[index]);
-            poemDTOList.add(newPoemDTO);
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            List<PoemDTO> createdPoems = new ArrayList<>();
+            for (PoemDTO poemDTO : poemDTOS) {
+                Poem poem = new Poem(poemDTO);
+                em.persist(poem);
+                createdPoems.add(new PoemDTO(poem));
+            }
+            em.getTransaction().commit();
+            return createdPoems;
         }
-        return poemDTOList;
     }
 
     public PoemDTO getPoemById(int id){
@@ -63,28 +58,33 @@ public class PoemDAO {
         }
     }
 
-    public void delete(int id){
+    public boolean delete(int id){
         try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
             Poem poem = em.find(Poem.class, id);
             if (poem != null){
                 em.remove(poem);
+                em.getTransaction().commit();
+                return true;
             }
-            em.getTransaction().commit();
+            em.getTransaction().rollback();
+            return false;
         }
     }
 
     public PoemDTO update(int id, PoemDTO poemDTO){
         try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
             Poem poem = em.find(Poem.class, id);
             if (poem != null) {
-                em.getTransaction().begin();
                 poem.setTitle(poemDTO.getTitle());
                 poem.setPoem(poemDTO.getPoem());
                 poem.setStyle(poemDTO.getStyle());
                 em.getTransaction().commit();
-            };
-            return new PoemDTO(poem);
+                return new PoemDTO(poem);
+            }
+            em.getTransaction().rollback();
+            return null;
         }
     }
 }

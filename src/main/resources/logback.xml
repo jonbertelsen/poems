@@ -14,22 +14,11 @@
         </encoder>
     </appender>
 
-    <appender name="DEBUGFILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/debug.log</file>
-        <append>true</append>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
     <root level="info">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </root>
 
     <!-- Adjust log levels for specific packages if needed -->
-    <logger name="app" level="debug" additivity="false" >
-        <appender-ref ref="DEBUGFILE" />
-        <appender-ref ref="CONSOLE" />
-    </logger>
+    <logger name="app" level="debug" />
 </configuration>

@@ -9,38 +9,22 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.15.0</jackson.version>
-        <lombok.version>1.18.28</lombok.version>
-        <hibernate.version>6.2.4.Final</hibernate.version>
-        <postgresql.version>42.7.2</postgresql.version>
-        <junit.version>5.9.1</junit.version>
-        <hamcrest.version>2.0.0.0</hamcrest.version>
-        <testcontainers.version>1.18.0</testcontainers.version>
-        <hikari.version>5.1.0</hikari.version>
-        <javalin.version>6.3.0</javalin.version>
-
-        <!-- DATABASE PROJECT NAME ON SERVER  -->
-        <db.name>jpademo</db.name>
+        <jackson.version>2.21.1</jackson.version>
+        <lombok.version>1.18.42</lombok.version>
+        <hibernate-version>7.2.3.Final</hibernate-version>
+        <postgres.version>42.7.7</postgres.version>
+        <junit.version>6.0.3</junit.version>
+        <hamcrest.version>3.0</hamcrest.version>
+        <testcontainers.version>2.0.3</testcontainers.version>
+        <javalin.version>7.0.1</javalin.version>
+        <logback-classic>1.5.27</logback-classic>
+        <org.slf4j>2.0.17</org.slf4j>
     </properties>
 
     <dependencies>
-
-        <!-- SLF4J API -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.16</version>
-        </dependency>
-
-        <!-- Logback Classic (SLF4J implementation) -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.5.7</version>
-        </dependency>
 
         <dependency>
             <groupId>io.javalin</groupId>
@@ -60,41 +44,61 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <!--        DATABASE-->
-        <!--        https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/The-JPA-and-Hibernate-CRUD-operations-example-->
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <!--        &lt;!&ndash;        https://www.postgresqltutorial.com/postgresql-getting-started/&ndash;&gt;-->
+        <!--  DB    -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
+            <version>${postgres.version}</version>
         </dependency>
-        <!--        TESTING       -->
-        <!--        https://www.baeldung.com/junit-5-->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-hikaricp</artifactId>
+            <version>${hibernate-version}</version>
+        </dependency>
+
+        <!--  LOMBOK    -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--  TESTING      -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--        https://www.baeldung.com/hamcrest-core-matchers-->
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>java-hamcrest</artifactId>
+            <artifactId>hamcrest</artifactId>
             <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--        https://java.testcontainers.org/quickstart/junit_5_quickstart/-->
+
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
@@ -103,37 +107,52 @@
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
+            <artifactId>testcontainers-postgresql</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>jdbc</artifactId>
+            <artifactId>testcontainers-jdbc</artifactId>
             <version>${testcontainers.version}</version>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>testcontainers-junit-jupiter</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!--  Logging   -->
+
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>${hikari.version}</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback-classic}</version>
         </dependency>
-        <!--        https://www.baeldung.com/intro-to-project-lombok-->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${org.slf4j}</version>
         </dependency>
     </dependencies>
     <build>
         <finalName>app</finalName> <!-- This is the name of the jar file -->
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <plugin>
                 <!--  https://www.baeldung.com/java-accessing-maven-properties  -->
                 <groupId>org.codehaus.mojo</groupId>

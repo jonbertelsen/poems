@@ -1,7 +1,7 @@
-package dat.dtos;
+package app.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import dat.entities.Poem;
+import app.entities.Poem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

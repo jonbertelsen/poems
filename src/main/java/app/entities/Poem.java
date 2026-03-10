@@ -1,6 +1,6 @@
-package dat.entities;
+package app.entities;
 
-import dat.dtos.PoemDTO;
+import app.dtos.PoemDTO;
 import jakarta.persistence.*;
 import lombok.*;
 

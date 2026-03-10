@@ -1,40 +1,87 @@
-# Poem Codelab exercise
+# Poem API
 
-This is a solution to part of the [Codelab exercise](https://dat3cph.github.io/material/rest-intro/exercises/codelab/)
+Simple REST API for managing poems, built with Javalin + Hibernate + PostgreSQL.
 
-Includes:
+## Tech Stack
 
-- IntelliJ setup
-- JPA dependencies
-- Lombok
-- Junit 5
-- Postgres drivers
-- Test containers
+- Java 25
+- Maven
+- Javalin 7 (HTTP server + routing)
+- Hibernate ORM 7 + JPA (`EntityManagerFactory`)
+- PostgreSQL
+- Jackson (JSON serialization/deserialization)
+- SLF4J + Logback (logging)
+- JUnit 6 + Testcontainers (testing dependencies in `pom.xml`)
 
-Is created for Java 17 corretto
+## Architecture Overview
 
-## Endpoints
+The project follows a layered structure:
 
-[Overview](http://localhost:7070/routes)
+- `routes` layer: declares HTTP endpoints
+- `controllers` layer: request/response handling and HTTP status codes
+- `daos` layer: database operations
+- `entities` layer: JPA entities mapped to tables
+- `dtos` layer: API-facing data objects
+- `config` layer: app and database bootstrapping
 
-## Architecture branch
+Request flow:
 
-The `architecture` branch has been refactored to use a layered architecture. 
-This can offer a better separation of concerns and make the code more maintainable.
-However, it could easily be even more elaborate, but this is a good start. For one thing, it needs
-tests. DAO test and Rest endpoint tests would be nice.
+1. `Main` starts the app and creates an `EntityManagerFactory`.
+2. `ApplicationConfig` sets Javalin base path to `/api`.
+3. `ApplicationConfig` enables route overview at `/routes` and registers endpoints from `Routes`.
+4. `Routes` mounts poem routes under `/poems`.
+5. `PoemRoutes` maps HTTP methods to `PoemController` methods.
+6. `PoemController` calls `PoemDAO` for persistence.
+7. `PoemDAO` uses Hibernate/JPA to read/write PostgreSQL.
 
-If you want to clone the `architecture` branch, you can do so with the following command:
+## Endpoint Overview
 
-```bash
-  git clone --branch architecture https://github.com/jonbertelsen/poems.git
+Base URL: `http://localhost:7070/api`
+
+| Method | Endpoint | Description | Controller method |
+|---|---|---|---|
+| GET | `/` | Health/hello endpoint | inline lambda (`"Hello World"`) |
+| GET | `/poems` | Get all poems | `getPoems` |
+| GET | `/poems/{id}` | Get poem by id | `getById` |
+| POST | `/poems` | Create one poem | `createPoem` |
+| POST | `/poems/batch` | Create multiple poems from JSON array | `createPoems` |
+| PUT | `/poems/{id}` | Update poem by id | `update` |
+| DELETE | `/poems/{id}` | Delete poem by id | `delete` |
+
+## Example Request Bodies
+
+Create single poem (`POST /api/poems`):
+
+```json
+{
+  "title": "Sunrise paints the sky",
+  "poem": "Sunrise paints the sky, Gentle waves kiss sandy shores, Day awakens slow.",
+  "style": "Haiku"
+}
 ```
 
-## Helpful links and resources
+Create batch (`POST /api/poems/batch`):
 
-1. [The Poem API Security Exercise](https://dat3cph.github.io/material/rest-test-security/exercises/poems-security/)
-2.  [Useful snippets](https://dat3cph.github.io/material/tools/security/api)
-3. [Token Security Library](https://github.com/Hartmannsolution/TokenSecurity)
-4. [Thomas' solution that we can copy/paste from](https://github.com/Hartmannsolution/poemsolution)
+```json
+[
+  {
+    "title": "Sunrise paints the sky",
+    "poem": "Sunrise paints the sky, Gentle waves kiss sandy shores, Day awakens slow.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Whispers of the breeze",
+    "poem": "Whispers of the breeze, Autumn leaves dance on the ground, Silent moonrise glow.",
+    "style": "Haiku"
+  }
+]
+```
 
+## Useful Files
 
+- `src/main/java/app/Main.java`
+- `src/main/java/app/config/ApplicationConfig.java`
+- `src/main/java/app/routes/Routes.java`
+- `src/main/java/app/routes/PoemRoutes.java`
+- `src/main/java/app/controllers/PoemController.java`
+- `src/main/resources/http/poem.http` (ready-made HTTP client requests)
